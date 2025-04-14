@@ -1,4 +1,4 @@
-name: Build iOS Simulator App and Save Artifact william
+name: Build iOS Simulator App and Save Artifact
 
 on:
   push:
@@ -12,15 +12,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      
+    - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.7.0' # غيّر النسخة حسب مشروعك
-
-    - name: Install dependencies
-      run: flutter pub get
-
+        channel: 'stable'
+        architecture: x64
+    - run: flutter pub get
+     
     - name: Build iOS app for Simulator
       run: flutter build ios --simulator
 
