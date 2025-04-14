@@ -1,36 +1,36 @@
-name: iOS-ipa-build
+name: Build iOS Simulator App and Save Artifact
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # غيّرها حسب الفرع اللي تريده
 
 jobs:
-  build-ios:
-    name: 🎉 iOS Build
+  build-ios-simulator:
     runs-on: macos-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          architecture: x64
-      - run: flutter pub get
-      
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.0' # غيّر النسخة حسب مشروعك
 
-      - run: pod repo update
-        working-directory: ios
+    - name: Install dependencies
+      run: flutter pub get
 
-      - name: Build iOS app for Simulator
-        run: flutter build ios --simulator
-  
-      - name: Zip the .app bundle
-        run: |
-          cd build/ios/iphonesimulator
-          zip -r Runner.zip Runner.app
+    - name: Build iOS app for Simulator
+      run: flutter build ios --simulator
 
-      - name: Upload build as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios-simulator-app
-          path: build/ios/iphonesimulator/Runner.zip
-           
+    - name: Zip the .app bundle
+      run: |
+        cd build/ios/iphonesimulator
+        zip -r Runner.zip Runner.app
+
+    - name: Upload iOS Simulator build as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-simulator-build
+        path: build/ios/iphonesimulator/Runner.zip
