@@ -27,3 +27,10 @@ jobs:
         run: |
           cd build/ios/iphonesimulator
           zip -r Runner.zip Runner.app
+
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-simulator-app
+          path: build/ios/iphonesimulator/Runner.zip
+           
